@@ -12,9 +12,34 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          ref: main  # Replace 'main' with the appropriate branch name
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}  # Fetch the secret value
 
-      # Add your build and test steps here
-      # For demonstration purposes, we'll just echo a message
+      - name: Install jq (JSON processor)
+        run: sudo apt-get update && sudo apt-get install jq -y
 
-      - name: Display a message
-        run: echo "GitHub Action triggered from PHP request!"
+      - name: Update JSON file
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}  # Fetch the secret value
+        run: |
+          # Store the JSON content in a variable
+          JSON_CONTENT=$(cat database.js)
+
+          # Get the JSON_PATH and NEW_TITLE from the payload and remove the surrounding quotes
+          JSON_PATH=$(echo "${{ github.event.client_payload.JSON_PATH }}" | tr -d '"')
+          NEW_TITLE=$(echo "${{ github.event.client_payload.NEW_TITLE }}" | tr -d '"')
+
+          # Update the title using the values from the payload
+          JSON_CONTENT=$(echo "$JSON_CONTENT" | jq "$JSON_PATH = \"$NEW_TITLE\"")
+
+          # Write the updated JSON content back to the file
+          echo "$JSON_CONTENT" > database.js
+
+          # Commit the changes and push
+          git config --global user.email "timmeeuwsen@hotmail.nl"
+          git config --global user.name "timmit147"
+          git add database.js
+          git commit -m "Update title as specified in the payload"
+          git push -u origin HEAD
