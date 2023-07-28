@@ -4,7 +4,7 @@
       "blocks": [
         {
           "type": "block1",
-          "title": "Title of Block 1 - Item 1",
+          "title": "hello",
           "content": "Content of Block 1 - Item 1",
           "link": "https://example.com/item1"
         },
