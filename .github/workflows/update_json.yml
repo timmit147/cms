@@ -1,0 +1,24 @@
+name: Update JSON File
+
+on:
+  workflow_dispatch: # Optional: You can also trigger the workflow manually if needed
+
+jobs:
+  update_json:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Update JSON file
+      run: |
+        # Read the existing JSON file and update the value
+        # Commit the changes back to the repository using git commands
+        # Example using jq to update the JSON file
+        jq --arg value "${{ github.event.client_payload.keyToUpdate }}" '.keyToUpdate = $value' database.js > updated_file.js
+        mv updated_file.json path/to/your/jsonfile.json
+        git config --global user.email "timmeeuwsen@hotmail.nl"
+        git config --global user.name "timmit147"
+        git commit -m "Update JSON file" database.js
+        git push
