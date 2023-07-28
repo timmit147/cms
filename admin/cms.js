@@ -16,39 +16,44 @@ async function fetchAllData() {
 async function placeBlock() {
     const data = await fetchAllData();
     const blocksData = data["pages"]["page1"]["blocks"];
-  
+
     // Get the container where the blocks will be placed
     const blockContainer = document.getElementById('blockContainer');
-  
+
     for (const block of blocksData) {
-      // Create a new div element for each block
-      const blockDiv = document.createElement('div');
-  
-      // Create input fields for title, content, link, and link_text
-      const titleInput = document.createElement('input');
-      titleInput.type = 'text';
-      titleInput.value = block.title;
-      blockDiv.appendChild(titleInput);
-  
-      const contentInput = document.createElement('textarea');
-      contentInput.value = block.content;
-      blockDiv.appendChild(contentInput);
-  
-      const linkInput = document.createElement('input');
-      linkInput.type = 'text';
-      linkInput.value = block.link;
-      blockDiv.appendChild(linkInput);
-  
-      const linkTextInput = document.createElement('input');
-      linkTextInput.type = 'text';
-      linkTextInput.value = block.link_text;
-      blockDiv.appendChild(linkTextInput);
-  
-      // Add the div to the container
-      blockContainer.appendChild(blockDiv);
+        // Create a new div element for each block
+        const blockDiv = document.createElement('div');
+
+        // Loop over all items in the block object
+        for (const key in block) {
+            if (block.hasOwnProperty(key)) {
+                // Create input field for each item in the block
+                const inputField = document.createElement('input');
+                inputField.type = 'text';
+                inputField.value = block[key];
+                blockDiv.appendChild(inputField);
+
+                // Add event listener for 'keydown' event
+                inputField.addEventListener('keydown', (event) => {
+                    // Check if the Enter key is pressed (keyCode 13) or (key === "Enter" for modern browsers)
+                    if (event.keyCode === 13 || event.key === "Enter") {
+                        // Call a separate function to handle logging the text
+                        logInputText(inputField.value);
+                    }
+                });
+            }
+        }
+
+        // Add the div to the container
+        blockContainer.appendChild(blockDiv);
     }
-  }
-  
+}
+
+function logInputText(text) {
+    console.log(text);
+}
+
+
   
   
   
