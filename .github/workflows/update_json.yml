@@ -1,24 +1,16 @@
-name: Update JSON File
+name: My Custom Workflow
 
 on:
-  workflow_dispatch: # Optional: You can also trigger the workflow manually if needed
+  workflow_dispatch:
+    inputs:
+      myInputParameter:
+        required: true
+        description: 'A parameter to pass data from the client-side'
 
 jobs:
-  update_json:
+  my_job:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Update JSON file
-      run: |
-        # Read the existing JSON file and update the value
-        # Commit the changes back to the repository using git commands
-        # Example using jq to update the JSON file
-        jq --arg value "${{ github.event.client_payload.keyToUpdate }}" '.keyToUpdate = $value' database.js > updated_file.js
-        mv updated_file.json path/to/your/jsonfile.json
-        git config --global user.email "timmeeuwsen@hotmail.nl"
-        git config --global user.name "timmit147"
-        git commit -m "Update JSON file" database.js
-        git push
+      - name: Echo Input Parameter
+        run: echo "Input Parameter: ${{ github.event.inputs.myInputParameter }}"
