@@ -38,8 +38,7 @@ async function placeBlock() {
                     // Check if the Enter key is pressed (keyCode 13) or (key === "Enter" for modern browsers)
                     if (event.keyCode === 13 || event.key === "Enter") {
                         // Call a separate function to handle logging the text
-                        logInputText(`.pages.page1.blocks[${index}].${key}`,inputField.value);
-                        sendRequestToPhp(route,value);   
+                        sendRequestToPhp(`.pages.page1.blocks[${index}].${key}`,inputField.value);
                     }
                 });
             }
@@ -49,6 +48,7 @@ async function placeBlock() {
         blockContainer.appendChild(blockDiv);
     }
 }
+
 
 function sendRequestToPhp(route, value) {
     const formData = new FormData();
