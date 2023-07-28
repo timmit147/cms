@@ -20,7 +20,7 @@ async function placeBlock() {
     // Get the container where the blocks will be placed
     const blockContainer = document.getElementById('blockContainer');
 
-    for (const block of blocksData) {
+    for (const [index, block] of blocksData.entries()) {
         // Create a new div element for each block
         const blockDiv = document.createElement('div');
 
@@ -38,7 +38,8 @@ async function placeBlock() {
                     // Check if the Enter key is pressed (keyCode 13) or (key === "Enter" for modern browsers)
                     if (event.keyCode === 13 || event.key === "Enter") {
                         // Call a separate function to handle logging the text
-                        logInputText(inputField.value);
+                        logInputText(`.pages.page1.blocks[${index}].${key}`,inputField.value);
+                        sendRequestToPhp(route,value);   
                     }
                 });
             }
@@ -49,29 +50,30 @@ async function placeBlock() {
     }
 }
 
-function logInputText(key) {
-    console.log(key);
-    sendRequestToPhp();   
-}
+function sendRequestToPhp(route, value) {
+    const formData = new FormData();
+    formData.append('JSON_PATH', route);
+    formData.append('NEW_TITLE', value);
 
-function sendRequestToPhp() {
-  // Replace 'your_php_file.php' with the correct path to your PHP file on the server
-  fetch('server.php')
+    fetch('server.php', {
+        method: 'POST',
+        body: formData
+    })
     .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.text();
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text();
     })
     .then(data => {
-      console.log(data); // Output the response to the console
+        console.log(data); // Output the response to the console
     })
     .catch(error => {
-      console.error('Fetch error:', error);
+        console.error('Fetch error:', error);
     });
 }
 
-
+  
   
   
 
