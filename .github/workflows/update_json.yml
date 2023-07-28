@@ -12,6 +12,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          ref: main  # Replace 'main' with the appropriate branch name
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}  # Fetch the secret value
 
       - name: Install jq (JSON processor)
         run: sudo apt-get update && sudo apt-get install jq -y
