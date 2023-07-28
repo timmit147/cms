@@ -1,0 +1,20 @@
+name: Trigger On PHP Request
+
+on:
+  repository_dispatch:
+    types:
+      - php_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Add your build and test steps here
+      # For demonstration purposes, we'll just echo a message
+
+      - name: Display a message
+        run: echo "GitHub Action triggered from PHP request!"

@@ -49,11 +49,33 @@ async function placeBlock() {
     }
 }
 
-function logInputText(text) {
-    console.log(text);
+function logInputText(key) {
+    console.log(key);
+    sendRequestToPhp();   
+}
+
+function sendRequestToPhp() {
+  // Replace 'your_php_file.php' with the correct path to your PHP file on the server
+  fetch('server.php')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.text();
+    })
+    .then(data => {
+      console.log(data); // Output the response to the console
+    })
+    .catch(error => {
+      console.error('Fetch error:', error);
+    });
 }
 
 
+  
+  
+
+  
   
   
   
