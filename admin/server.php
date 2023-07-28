@@ -2,7 +2,7 @@
 $repoOwner = 'timmit147';
 $repoName = 'cms'; // Update to the correct repository name without .git
 $workflowFileName = 'update_json.yml';
-$token = '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';
+$token = '';
 
 // Create a new GitHub API request to trigger the repository dispatch event
 $url = "https://api.github.com/repos/{$repoOwner}/{$repoName}/dispatches";
