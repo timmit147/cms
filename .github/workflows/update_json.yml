@@ -23,12 +23,14 @@ jobs:
       - name: Update JSON file
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}  # Fetch the secret value
+          JSON_PATH: '.pages.page1.blocks[0].title'
+          NEW_TITLE: 'test'
         run: |
           # Store the JSON content in a variable
           JSON_CONTENT=$(cat database.js)
 
-          # Update the title of the first block under "page1" to "hello"
-          JSON_CONTENT=$(echo "$JSON_CONTENT" | jq '.pages.page1.blocks[0].title = "hello"')
+          # Update the title using variables
+          JSON_CONTENT=$(echo "$JSON_CONTENT" | jq "$JSON_PATH = \"$NEW_TITLE\"")
 
           # Write the updated JSON content back to the file
           echo "$JSON_CONTENT" > database.js
@@ -39,4 +41,3 @@ jobs:
           git add database.js
           git commit -m "Update title of the first block in page1"
           git push -u origin HEAD
-
