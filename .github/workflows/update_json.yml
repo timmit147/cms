@@ -18,4 +18,3 @@ jobs:
 
       - name: Display a message
         run: echo "GitHub Action triggered from PHP request!"
-
