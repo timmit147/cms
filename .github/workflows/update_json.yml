@@ -27,9 +27,9 @@ jobs:
           # Store the JSON content in a variable
           JSON_CONTENT=$(cat database.js)
 
-          # Get the JSON_PATH and NEW_TITLE from the payload
-          JSON_PATH=$JSON_PATH_FROM_PAYLOAD
-          NEW_TITLE=$NEW_TITLE_FROM_PAYLOAD
+          # Get the JSON_PATH and NEW_TITLE from the payload and remove the surrounding quotes
+          JSON_PATH=$(echo "${{ github.event.client_payload.JSON_PATH }}" | tr -d '"')
+          NEW_TITLE=$(echo "${{ github.event.client_payload.NEW_TITLE }}" | tr -d '"')
 
           # Update the title using the values from the payload
           JSON_CONTENT=$(echo "$JSON_CONTENT" | jq "$JSON_PATH = \"$NEW_TITLE\"")
