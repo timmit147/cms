@@ -23,7 +23,7 @@ jobs:
       - name: Retrieve the hash of the previous database.js
         id: get_previous_hash
         run: |
-          PREVIOUS_HASH=$(git show HEAD:database.js | sha256sum | awk '{print $1}')
+          PREVIOUS_HASH=$(git log -n 1 --format=%H database.js)
           echo "::set-output name=previous_hash::$PREVIOUS_HASH"
 
       - name: Update JSON file with modified JSON_PATH and keep original JSON_PATH for NEW_TITLE
