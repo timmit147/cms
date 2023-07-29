@@ -12,6 +12,33 @@ async function fetchAllData() {
     }
 }
 
+async function fetchOldData(commitHash) {
+    try {
+        const response = await fetch(
+            `https://raw.githubusercontent.com/timmit147/cms/${commitHash}/database.js`
+        );
+
+        if (!response.ok) {
+            throw new Error("Network response was not ok.");
+        }
+
+        const jsonData = await response.json();
+        return jsonData;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        return null;
+    }
+}
+
+async function fetchData() {
+    const commitHash = "158de67631ea0ed16d44f8a7853e3468779d81df";
+    const oldData = await fetchOldData(commitHash);
+    console.log(oldData);
+}
+
+fetchData();
+
+
 
 async function placeBlock() {
     const data = await fetchAllData();
