@@ -11,11 +11,11 @@
         },
         {
           "type": "block1",
-          "title": "pannenkoek",
+          "title": "zandkasteel",
           "content": "Content of Block 1 - Item 2",
           "link": "pizza",
           "link_text": "Link Text for Block 1 - Item 2",
-          "hash": "8bd91fc1af226417602a5863f5def1ec272ae2ed69b74a1ce3a44599ca4dfb5f"
+          "hash": "248724d14b357693536e0e8c279f856d28d3463bad83a37407f3d68507d1a5b1"
         },
         {
           "type": "block2",
