@@ -43,11 +43,8 @@ jobs:
           # Get the previous hash from the previous step
           PREVIOUS_HASH=${{ steps.get_previous_hash.outputs.previous_hash }}
 
-          # Modify the JSON_PATH to add the "hash" key with the specific value
-          JSON_PATH=$(echo "$JSON_PATH" | sed 's/\(.*\)\./\1\.hash/')
-
           # Add the "hash" key with the specific value to the JSON content
-          JSON_CONTENT=$(echo "$JSON_CONTENT" | jq "$JSON_PATH = \"$PREVIOUS_HASH\"")
+          JSON_CONTENT=$(echo "$JSON_CONTENT" | jq ". + {\"hash\":\"$PREVIOUS_HASH\"}")
 
           # Write the updated JSON content back to the file
           echo "$JSON_CONTENT" > database.js
