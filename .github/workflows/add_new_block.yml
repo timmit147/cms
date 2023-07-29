@@ -10,6 +10,16 @@ jobs:
     - name: Check out repository code
       uses: actions/checkout@v2
 
-    - name: Read and Log database.js
+    - name: Update database.js
       run: |
-        cat database.js | while read line; do echo $line; done
+        template='
+        {
+          "type": "block4",
+          "title": "apple",
+          "content": "apples en peren"
+        }
+        '
+        echo "$template" >> database.js
+
+    - name: Show updated database.js
+      run: cat database.js
