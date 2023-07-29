@@ -31,9 +31,6 @@ async function fetchOldData(commitHash) {
 }
 
 
-fetchData();
-
-
 
 async function placeBlock(changedData) {
     var data = await fetchAllData();
@@ -52,6 +49,9 @@ async function placeBlock(changedData) {
         // Loop over all items in the block object
         for (const key in block) {
             if (key === "type") {
+                continue;
+            }
+            if (key === "hash") {
                 continue;
             }
             if (block.hasOwnProperty(key)) {
@@ -81,7 +81,7 @@ async function placeBlock(changedData) {
         reverseButton.textContent = 'Reverse';
         reverseButton.addEventListener('click', () => {
             // Call a separate function to handle the reverse action for this block
-            reverseBlock(blocksData, index);
+            reverseBlock(block.hash);
         });
         blockDiv.appendChild(reverseButton);
 
@@ -90,23 +90,19 @@ async function placeBlock(changedData) {
     }
 }
 
-async function reverseBlock() {
+async function reverseBlock(hash) {
+    console.log(hash);
+    blockContainer.innerHTML = ''; // Clear the existing content
+
     try {
-        const commitHash = "158de67631ea0ed16d44f8a7853e3468779d81df";
-        const data = await fetchData(commitHash); // Wait for fetchData to complete and get the data
-        placeBlock(data); // Call placeBlockWithData to process the fetched data
+        const oldData = await fetchOldData(hash);
+        placeBlock(oldData); // Call placeBlockWithData to process the fetched data
     } catch (error) {
         // Handle any errors that might occur during fetching or processing data
         console.error("Error:", error);
     }
 }
 
-
-async function fetchData(commitHash) {
-    const hash = "158de67631ea0ed16d44f8a7853e3468779d81df";
-    const oldData = await fetchOldData(hash);
-    console.log(oldData);
-}
 
 
 
