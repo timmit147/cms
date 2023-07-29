@@ -29,6 +29,11 @@
           "content": "Content of Block 3",
           "link": "https://example.com/block3",
           "link_text": "Link Text for Block 3"
+        },
+        {
+          "type": "block4",
+          "title": "apple",
+          "content": "apples en peren"
         }
       ]
     },
@@ -51,10 +56,19 @@
   },
   "hash": "868216a6b2ef31b6a370ebc562d4bb3c299ce4c98b07b75054f82ad548403153"
 }
-
 {
   "type": "block4",
   "title": "apple",
-  "content": "apples en peren"
+  "content": "apples en peren",
+  "pages": {
+    "page1": {
+      "blocks": [
+        {
+          "type": "block4",
+          "title": "apple",
+          "content": "apples en peren"
+        }
+      ]
+    }
+  }
 }
-
