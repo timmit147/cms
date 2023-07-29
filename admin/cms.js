@@ -1,167 +1,155 @@
-async function fetchAllData() {
-    try {
-        const response = await fetch("../database.js");
-        if (!response.ok) {
-        throw new Error("Network response was not ok.");
-        }
-        const jsonData = await response.json();
-        return jsonData;
-    } catch (error) {
-        console.error("Error fetching data:", error);
-        return null;
-    }
-}
 
-async function fetchOldData(commitHash) {
-    try {
-        const response = await fetch(
-            `https://raw.githubusercontent.com/timmit147/cms/${commitHash}/database.js`
-        );
+        // Define a global variable to store the current page data
+        let currentPage = null;
 
-        if (!response.ok) {
-            throw new Error("Network response was not ok.");
+        async function fetchAllData() {
+            try {
+                const response = await fetch("../database.js");
+                if (!response.ok) {
+                    throw new Error("Network response was not ok.");
+                }
+                const jsonData = await response.json();
+                return jsonData;
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                return null;
+            }
         }
 
-        const jsonData = await response.json();
-        return jsonData;
-    } catch (error) {
-        console.error("Error fetching data:", error);
-        return null;
-    }
-}
-
-
-
-async function placeBlock(changedData) {
-    var data = await fetchAllData();
-    if(changedData){
-        data = changedData;
-    }
-    const blocksData = data["pages"]["page1"]["blocks"];
-
-    // Get the container where the blocks will be placed
-    const blockContainer = document.getElementById('blockContainer');
-
-    for (const [index, block] of blocksData.entries()) {
-        // Create a new div element for each block
-        const blockDiv = document.createElement('div');
-
-        // Loop over all items in the block object
-        for (const key in block) {
-            if (key === "type") {
-                continue;
+        async function placeBlock() {
+            if (!currentPage) {
+                return;
             }
-            if (key === "hash") {
-                continue;
-            }
-            if (block.hasOwnProperty(key)) {
-                const inputLabel = document.createElement('label');
-                inputLabel.textContent = key;
-                inputLabel.style.fontWeight = 'bold';
-                blockDiv.appendChild(inputLabel);
 
-                const inputField = document.createElement('input');
-                inputField.type = 'text';
-                inputField.value = block[key];
-                blockDiv.appendChild(inputField);
+            const blocksData = currentPage["blocks"];
+            const blockContainer = document.getElementById('blockContainer');
+            blockContainer.innerHTML = ''; // Clear the existing content
 
-                // Add event listener for 'keydown' event
-                inputField.addEventListener('keydown', (event) => {
-                    // Check if the Enter key is pressed (keyCode 13) or (key === "Enter" for modern browsers)
-                    if (event.keyCode === 13 || event.key === "Enter") {
-                        // Call a separate function to handle logging the text
-                        sendRequestToPhp(`.pages.page1.blocks[${index}].${key}`, inputField.value);
+            for (const [index, block] of blocksData.entries()) {
+                const blockDiv = document.createElement('div');
+
+                for (const key in block) {
+                    if (key === "type" || key === "hash") {
+                        continue;
                     }
+                    if (block.hasOwnProperty(key)) {
+                        const inputLabel = document.createElement('label');
+                        inputLabel.textContent = key;
+                        inputLabel.style.fontWeight = 'bold';
+                        blockDiv.appendChild(inputLabel);
+
+                        const inputField = document.createElement('input');
+                        inputField.type = 'text';
+                        inputField.value = block[key];
+                        blockDiv.appendChild(inputField);
+
+                        inputField.addEventListener('keydown', (event) => {
+                            if (event.keyCode === 13 || event.key === "Enter") {
+                                sendRequestToPhp(`.pages.${currentPage.name}.blocks[${index}].${key}`, inputField.value);
+                            }
+                        });
+                    }
+                }
+
+                const reverseButton = document.createElement('button');
+                reverseButton.textContent = 'Reverse';
+                reverseButton.addEventListener('click', () => {
+                    reverseBlock(block.hash);
                 });
+                blockDiv.appendChild(reverseButton);
+
+                blockContainer.appendChild(blockDiv);
             }
         }
 
-        // Create a reverse button for the block
-        const reverseButton = document.createElement('button');
-        reverseButton.textContent = 'Reverse';
-        reverseButton.addEventListener('click', () => {
-            // Call a separate function to handle the reverse action for this block
-            reverseBlock(block.hash);
-        });
-        blockDiv.appendChild(reverseButton);
+        async function fetchOldData(commitHash) {
+            try {
+                const response = await fetch(
+                    `https://raw.githubusercontent.com/timmit147/cms/${commitHash}/database.js`
+                );
 
-        // Add the div to the container
-        blockContainer.appendChild(blockDiv);
-    }
-}
+                if (!response.ok) {
+                    throw new Error("Network response was not ok.");
+                }
 
-async function reverseBlock(hash) {
-    console.log(hash);
-    blockContainer.innerHTML = ''; // Clear the existing content
-
-    try {
-        const oldData = await fetchOldData(hash);
-        placeBlock(oldData); // Call placeBlockWithData to process the fetched data
-    } catch (error) {
-        // Handle any errors that might occur during fetching or processing data
-        console.error("Error:", error);
-    }
-}
-
-
-
-
-function sendRequestToPhp(route, value) {
-    const formData = new FormData();
-    formData.append('JSON_PATH', route);
-    formData.append('NEW_TITLE', value);
-
-    fetch('server.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+                const jsonData = await response.json();
+                return jsonData;
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                return null;
+            }
         }
-        return response.text();
-    })
-    .then(data => {
-        console.log(data); // Output the response to the console
-    })
-    .catch(error => {
-        console.error('Fetch error:', error);
-    });
-}
 
-  
-async function addMenuButtons() {
-    const menuContainer = document.getElementById('menuContainer');
-  
-    try {
-      var data = await fetchAllData();
-      const blocksData = data["pages"];
-      console.log(blocksData);
+        async function reverseBlock(hash) {
+            console.log(hash);
+            try {
+                const oldData = await fetchOldData(hash);
+                if (oldData && oldData.pages) {
+                    const pages = oldData.pages;
+                    for (const page in pages) {
+                        if (pages.hasOwnProperty(page)) {
+                            currentPage = pages[page];
+                            currentPage.name = page;
+                            placeBlock();
+                            break; // Only process the first page found
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
 
-  
-      for (const page in blocksData) {
-        const button = document.createElement('button');
-        button.textContent = page;
-  
-        button.addEventListener('click', () => {
-          console.log(`Button "${page}" clicked`);
-        });
-  
-        menuContainer.appendChild(button);
-      };
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  }
-  
-  // Call the function to add the menu buttons
-  addMenuButtons(); 
-  
+        function sendRequestToPhp(route, value) {
+            const formData = new FormData();
+            formData.append('JSON_PATH', route);
+            formData.append('NEW_TITLE', value);
 
-  
-  
-  
-  
-placeBlock();
+            fetch('server.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                console.log(data); // Output the response to the console
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+        }
 
-  
+        async function addMenuButtons() {
+            const menuContainer = document.getElementById('menuContainer');
+
+            try {
+                var data = await fetchAllData();
+                const pagesData = data["pages"];
+
+                for (const page in pagesData) {
+                    const button = document.createElement('button');
+                    button.textContent = page;
+
+                    button.addEventListener('click', () => {
+                        currentPage = pagesData[page];
+                        currentPage.name = page;
+                        placeBlock();
+                        console.log(`Button "${page}" clicked`);
+                    });
+
+                    menuContainer.appendChild(button);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Call the function to add the menu buttons
+        addMenuButtons();
+
+        // Call placeBlock without any argument to display the initial data (page1)
+        placeBlock();
