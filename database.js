@@ -11,10 +11,11 @@
         },
         {
           "type": "block1",
-          "title": "test 2",
+          "title": "pannenkoek",
           "content": "Content of Block 1 - Item 2",
           "link": "pizza",
-          "link_text": "Link Text for Block 1 - Item 2"
+          "link_text": "Link Text for Block 1 - Item 2",
+          "hash": "8bd91fc1af226417602a5863f5def1ec272ae2ed69b74a1ce3a44599ca4dfb5f"
         },
         {
           "type": "block2",
