@@ -27,20 +27,14 @@ jobs:
 
       - name: Add block to database.js
         run: |
-          # Get the trigger_block content from the output of the previous step
-          TRIGGER_BLOCK_CONTENT="${{ steps.read_trigger_block.outputs.trigger_block }}"
-
           # Read the current database.js content
           DATABASE_CONTENT=$(<database.js)
 
-          # Extract the "blocks" array from the JSON content
-          BLOCKS_ARRAY=$(echo "$DATABASE_CONTENT" | jq '.pages.page1.blocks')
+          # Get the trigger_block content from the output of the previous step
+          TRIGGER_BLOCK_CONTENT=$(cat trigger_block.json)
 
           # Append the new block to the "blocks" array
-          NEW_BLOCKS_ARRAY=$(echo "$BLOCKS_ARRAY + [$TRIGGER_BLOCK_CONTENT]")
-
-          # Replace the "blocks" array in the JSON content with the updated array
-          UPDATED_CONTENT=$(echo "$DATABASE_CONTENT" | jq '.pages.page1.blocks = $new_blocks' --argjson new_blocks "$NEW_BLOCKS_ARRAY")
+          UPDATED_CONTENT=$(echo "$DATABASE_CONTENT" | jq --argjson new_block "$TRIGGER_BLOCK_CONTENT" '.pages.page1.blocks += [$new_block]')
 
           # Write the updated JSON content back to the file
           echo "$UPDATED_CONTENT" > database.js
