@@ -31,7 +31,10 @@ jobs:
           JSON_PATH=$(echo "${{ github.event.client_payload.JSON_PATH }}" | tr -d '"')
           NEW_TITLE=$(echo "${{ github.event.client_payload.NEW_TITLE }}" | tr -d '"')
 
-          # Update the title using the values from the payload
+          # Modify the JSON_PATH to replace .${key} with .hash
+          JSON_PATH=$(echo "$JSON_PATH" | sed 's/\.${key}/\.hash/g')
+
+          # Update the title using the NEW_TITLE from the payload
           JSON_CONTENT=$(echo "$JSON_CONTENT" | jq "$JSON_PATH = \"$NEW_TITLE\"")
 
           # Write the updated JSON content back to the file
