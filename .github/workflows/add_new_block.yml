@@ -1,47 +1,11 @@
-name: Add Block to Page 1
+name: Hello Workflow
 
 on:
-  workflow_dispatch:  # Allows manual triggering via the GitHub API
+  workflow_dispatch: # Manually trigger the workflow
 
 jobs:
-  add_block:
+  hello_job:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Install jq (JSON processor)
-        run: sudo apt-get update && sudo apt-get install jq -y
-
-      - name: Read trigger_block.json
-        id: read_trigger_block
-        run: |
-          echo "::set-output name=trigger_block::$(cat trigger_block.json)"
-
-      - name: Debug trigger_block content
-        run: |
-          TRIGGER_BLOCK_CONTENT="${{ steps.read_trigger_block.outputs.trigger_block }}"
-          echo "Trigger Block Content:"
-          echo "$TRIGGER_BLOCK_CONTENT"
-
-      - name: Add block to database.js
-        run: |
-          # Read the current database.js content
-          DATABASE_CONTENT=$(<database.js)
-
-          # Get the trigger_block content from the output of the previous step
-          TRIGGER_BLOCK_CONTENT=$(cat trigger_block.json)
-
-          # Append the new block to the "blocks" array
-          UPDATED_CONTENT=$(echo "$DATABASE_CONTENT" | jq --argjson new_block "$TRIGGER_BLOCK_CONTENT" '.pages.page1.blocks += [$new_block]')
-
-          # Write the updated JSON content back to the file
-          echo "$UPDATED_CONTENT" > database.js
-
-          # Commit the changes and push
-          git config --global user.email "timmeeuwsen@hotmail.nl"
-          git config --global user.name "timmit147"
-          git add database.js
-          git commit -m "Add new block to page 1"
-          git push -u origin HEAD
+    - name: Say Hello
+      run: echo "Hello"
