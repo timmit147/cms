@@ -26,6 +26,9 @@ async function placeBlock() {
 
         // Loop over all items in the block object
         for (const key in block) {
+            if(key == "type"){
+                continue;
+            }
             if (block.hasOwnProperty(key)) {
                 // Create input field for each item in the block
                 const inputField = document.createElement('input');
