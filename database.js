@@ -18,10 +18,10 @@
         {
           "type": "block2",
           "title": "pindakaaspot",
-          "content": "Content of Block 2",
+          "content": "hallo this is a test",
           "link": "https://example.com/block2",
           "link_text": "Link Text for Block 2",
-          "hash": "40982c88888d8e1ef54b7a4837784619e01a4746"
+          "hash": "8b203baad0691282bcdafd9cac654dae3c950de6"
         },
         {
           "type": "block3",
