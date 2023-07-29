@@ -26,25 +26,26 @@ jobs:
           PREVIOUS_HASH=$(git show HEAD:database.js | sha256sum | awk '{print $1}')
           echo "::set-output name=previous_hash::$PREVIOUS_HASH"
 
-      - name: Update JSON file
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}  # Fetch the secret value
+      - name: Update JSON file with modified JSON_PATH and keep original JSON_PATH for NEW_TITLE
         run: |
-          # Store the JSON content in a variable
-          JSON_CONTENT=$(cat database.js)
-
           # Get the JSON_PATH and NEW_TITLE from the payload and remove the surrounding quotes
           JSON_PATH=$(echo "${{ github.event.client_payload.JSON_PATH }}" | tr -d '"')
           NEW_TITLE=$(echo "${{ github.event.client_payload.NEW_TITLE }}" | tr -d '"')
 
-          # Update the title using the NEW_TITLE from the payload
-          JSON_CONTENT=$(echo "$JSON_CONTENT" | jq "$JSON_PATH = \"$NEW_TITLE\"")
+          # Modify the JSON_PATH by removing the last part starting with a dot (.) for the hash
+          MODIFIED_JSON_PATH=$(echo "$JSON_PATH" | sed 's/\.[^.]*$/.hash/')
+
+          # Store the JSON content in a variable
+          JSON_CONTENT=$(cat database.js)
 
           # Get the previous hash from the previous step
           PREVIOUS_HASH=${{ steps.get_previous_hash.outputs.previous_hash }}
 
-          # Add the "hash" key with the specific value to the JSON content
-          JSON_CONTENT=$(echo "$JSON_CONTENT" | jq ". + {\"hash\":\"$PREVIOUS_HASH\"}")
+          # Update the JSON content with the modified JSON_PATH for placing the hash
+          JSON_CONTENT=$(echo "$JSON_CONTENT" | jq "$MODIFIED_JSON_PATH = \"$PREVIOUS_HASH\"")
+
+          # Update the title using the NEW_TITLE from the payload using the original JSON_PATH
+          JSON_CONTENT=$(echo "$JSON_CONTENT" | jq "$JSON_PATH = \"$NEW_TITLE\"")
 
           # Write the updated JSON content back to the file
           echo "$JSON_CONTENT" > database.js
