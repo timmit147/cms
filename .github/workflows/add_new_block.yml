@@ -7,5 +7,9 @@ jobs:
   hello_job:
     runs-on: ubuntu-latest
     steps:
-    - name: Say Hello
-      run: echo "Hello"
+    - name: Check out repository code
+      uses: actions/checkout@v2
+
+    - name: Read and Log database.js
+      run: |
+        cat database.js | while read line; do echo $line; done
