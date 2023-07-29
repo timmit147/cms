@@ -1,6 +1,4 @@
-
-        // Define a global variable to store the current page data
-        let currentPage = null;
+let currentPage = null;
 
         async function fetchAllData() {
             try {
@@ -20,14 +18,14 @@
             if (!currentPage) {
                 return;
             }
-        
+
             const blocksData = currentPage["blocks"];
             const blockContainer = document.getElementById('blockContainer');
             blockContainer.innerHTML = ''; // Clear the existing content
-        
+
             for (const [index, block] of blocksData.entries()) {
                 const blockDiv = document.createElement('div');
-        
+
                 for (const key in block) {
                     if (key === "type" || key === "hash") {
                         continue;
@@ -37,12 +35,12 @@
                         inputLabel.textContent = key;
                         inputLabel.style.fontWeight = 'bold';
                         blockDiv.appendChild(inputLabel);
-        
+
                         const inputField = document.createElement('input');
                         inputField.type = 'text';
                         inputField.value = block[key];
                         blockDiv.appendChild(inputField);
-        
+
                         inputField.addEventListener('keydown', (event) => {
                             if (event.keyCode === 13 || event.key === "Enter") {
                                 sendRequestToPhp(`.pages.${currentPage.name}.blocks[${index}].${key}`, inputField.value);
@@ -50,20 +48,19 @@
                         });
                     }
                 }
-        
+
                 if (block.hash) {
                     const reverseButton = document.createElement('button');
                     reverseButton.textContent = 'Reverse';
                     reverseButton.addEventListener('click', () => {
-                        reverseBlock(block.hash);
+                        reverseBlock(index, block.hash); // Pass the block index and hash to reverseBlock function
                     });
                     blockDiv.appendChild(reverseButton);
                 }
-        
+
                 blockContainer.appendChild(blockDiv);
             }
         }
-        
 
         async function fetchOldData(commitHash) {
             try {
@@ -83,16 +80,19 @@
             }
         }
 
-        async function reverseBlock(hash) {
-            console.log(hash);
+        async function reverseBlock(blockIndex, hash) {
             try {
                 const oldData = await fetchOldData(hash);
                 if (oldData && oldData.pages) {
                     const pages = oldData.pages;
                     for (const page in pages) {
                         if (pages.hasOwnProperty(page)) {
-                            currentPage = pages[page];
-                            currentPage.name = page;
+                            const reversedBlock = pages[page]["blocks"][blockIndex];
+                            for (const key in reversedBlock) {
+                                if (reversedBlock.hasOwnProperty(key)) {
+                                    currentPage["blocks"][blockIndex][key] = reversedBlock[key];
+                                }
+                            }
                             placeBlock();
                             break; // Only process the first page found
                         }
@@ -141,7 +141,6 @@
                         currentPage = pagesData[page];
                         currentPage.name = page;
                         placeBlock();
-                        console.log(`Button "${page}" clicked`);
                     });
 
                     menuContainer.appendChild(button);

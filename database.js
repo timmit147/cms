@@ -6,8 +6,7 @@
           "type": "block1",
           "title": "does this code work....",
           "content": "Content of Block 1 - Item 1",
-          "link": "https://example.com/item1",
-          "hashtitle": "1ba0c008a50ef3e25bfe5b7e86ae852a5a58def799c4ab35fb23e82fc82f0673"
+          "link": "https://example.com/item1"
         },
         {
           "type": "block1",
@@ -41,7 +40,14 @@
         }
       ]
     },
-    "page3": {}
+    "page3": {
+      "blocks": [
+        {
+          "type": "Hallo",
+          "title": "hallo"
+        }
+      ]
+    }
   },
   "hash": "868216a6b2ef31b6a370ebc562d4bb3c299ce4c98b07b75054f82ad548403153"
 }
