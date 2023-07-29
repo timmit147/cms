@@ -17,11 +17,11 @@
         },
         {
           "type": "block2",
-          "title": "hamster",
+          "title": "pindakaaspot",
           "content": "Content of Block 2",
           "link": "https://example.com/block2",
           "link_text": "Link Text for Block 2",
-          "hash": "158de67631ea0ed16d44f8a7853e3468779d81df"
+          "hash": "40982c88888d8e1ef54b7a4837784619e01a4746"
         },
         {
           "type": "block3",
