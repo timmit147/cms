@@ -19,6 +19,12 @@ jobs:
         run: |
           echo "::set-output name=trigger_block::$(cat trigger_block.json)"
 
+      - name: Debug trigger_block content
+        run: |
+          TRIGGER_BLOCK_CONTENT="${{ steps.read_trigger_block.outputs.trigger_block }}"
+          echo "Trigger Block Content:"
+          echo "$TRIGGER_BLOCK_CONTENT"
+
       - name: Add block to database.js
         run: |
           # Get the trigger_block content from the output of the previous step
