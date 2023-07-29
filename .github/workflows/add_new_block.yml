@@ -18,17 +18,16 @@ jobs:
 
     - name: Add Block to Page1
       run: |
-        # New block content
-        new_block='
-        {
-          "type": "block4",
-          "title": "apple",
-          "content": "apples en peren"
-        }
-        '
+        # New block content in YAML-style multi-line string
+        new_block_content: |
+          {
+            "type": "block4",
+            "title": "apple",
+            "content": "apples en peren"
+          }
 
         # Append the new block to the "blocks" array in "page1"
-        updated_content=$(jq '.pages.page1.blocks += ['"$new_block"']' <<<"${{ steps.read_database.outputs.database_content }}")
+        updated_content=$(jq '.pages.page1.blocks += ['"$new_block_content"']' <<<"${{ steps.read_database.outputs.database_content }}")
 
         # Update the database.js file with the updated content
         echo "$updated_content" > database.js
