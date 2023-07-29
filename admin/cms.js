@@ -30,7 +30,12 @@ async function placeBlock() {
                 continue;
             }
             if (block.hasOwnProperty(key)) {
-                // Create input field for each item in the block
+                const inputLabel = document.createElement('label');
+                inputLabel.textContent = key;
+                inputLabel.style.fontWeight = 'bold'; 
+                blockDiv.appendChild(inputLabel);
+                
+
                 const inputField = document.createElement('input');
                 inputField.type = 'text';
                 inputField.value = block[key];
