@@ -14,8 +14,7 @@
           "title": "zandkasteel",
           "content": "Content of Block 1 - Item 2",
           "link": "pizza",
-          "link_text": "Link Text for Block 1 - Item 2",
-          "hash": "248724d14b357693536e0e8c279f856d28d3463bad83a37407f3d68507d1a5b1"
+          "link_text": "Link Text for Block 1 - Item 2"
         },
         {
           "type": "block2",

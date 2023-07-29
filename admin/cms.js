@@ -20,14 +20,14 @@
             if (!currentPage) {
                 return;
             }
-
+        
             const blocksData = currentPage["blocks"];
             const blockContainer = document.getElementById('blockContainer');
             blockContainer.innerHTML = ''; // Clear the existing content
-
+        
             for (const [index, block] of blocksData.entries()) {
                 const blockDiv = document.createElement('div');
-
+        
                 for (const key in block) {
                     if (key === "type" || key === "hash") {
                         continue;
@@ -37,12 +37,12 @@
                         inputLabel.textContent = key;
                         inputLabel.style.fontWeight = 'bold';
                         blockDiv.appendChild(inputLabel);
-
+        
                         const inputField = document.createElement('input');
                         inputField.type = 'text';
                         inputField.value = block[key];
                         blockDiv.appendChild(inputField);
-
+        
                         inputField.addEventListener('keydown', (event) => {
                             if (event.keyCode === 13 || event.key === "Enter") {
                                 sendRequestToPhp(`.pages.${currentPage.name}.blocks[${index}].${key}`, inputField.value);
@@ -50,17 +50,20 @@
                         });
                     }
                 }
-
-                const reverseButton = document.createElement('button');
-                reverseButton.textContent = 'Reverse';
-                reverseButton.addEventListener('click', () => {
-                    reverseBlock(block.hash);
-                });
-                blockDiv.appendChild(reverseButton);
-
+        
+                if (block.hash) {
+                    const reverseButton = document.createElement('button');
+                    reverseButton.textContent = 'Reverse';
+                    reverseButton.addEventListener('click', () => {
+                        reverseBlock(block.hash);
+                    });
+                    blockDiv.appendChild(reverseButton);
+                }
+        
                 blockContainer.appendChild(blockDiv);
             }
         }
+        
 
         async function fetchOldData(commitHash) {
             try {
