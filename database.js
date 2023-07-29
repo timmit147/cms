@@ -11,7 +11,7 @@
         },
         {
           "type": "block1",
-          "title": "Title of Block 1 - Item 2",
+          "title": "test 2",
           "content": "Content of Block 1 - Item 2",
           "link": "pizza",
           "link_text": "Link Text for Block 1 - Item 2"
@@ -35,5 +35,5 @@
     "page2": {},
     "page3": {}
   },
-  "hash": "41de44cb83eb692f5664962be757b7148296d67057163ba956aedacc3c6a397c"
+  "hash": "868216a6b2ef31b6a370ebc562d4bb3c299ce4c98b07b75054f82ad548403153"
 }
