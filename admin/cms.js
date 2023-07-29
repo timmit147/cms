@@ -130,7 +130,32 @@ function sendRequestToPhp(route, value) {
 }
 
   
+async function addMenuButtons() {
+    const menuContainer = document.getElementById('menuContainer');
   
+    try {
+      var data = await fetchAllData();
+      const blocksData = data["pages"];
+      console.log(blocksData);
+
+  
+      for (const page in blocksData) {
+        const button = document.createElement('button');
+        button.textContent = page;
+  
+        button.addEventListener('click', () => {
+          console.log(`Button "${page}" clicked`);
+        });
+  
+        menuContainer.appendChild(button);
+      };
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+  
+  // Call the function to add the menu buttons
+  addMenuButtons(); 
   
 
   

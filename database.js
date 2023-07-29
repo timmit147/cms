@@ -34,7 +34,14 @@
         }
       ]
     },
-    "page2": {},
+    "page2": {
+      "blocks": [
+        {
+          "type": "test",
+          "title": "does this code work...."
+        }
+      ]
+    },
     "page3": {}
   },
   "hash": "868216a6b2ef31b6a370ebc562d4bb3c299ce4c98b07b75054f82ad548403153"
