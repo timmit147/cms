@@ -20,18 +20,31 @@ jobs:
       - name: Install jq (JSON processor)
         run: sudo apt-get update && sudo apt-get install jq -y
 
-      - name: Update JSON file
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}  # Fetch the secret value
+      - name: Retrieve the hash of the previous database.js
+        id: get_previous_hash
         run: |
-          # Store the JSON content in a variable
-          JSON_CONTENT=$(cat database.js)
+          PREVIOUS_HASH=$(git log -n 1 --format=%H database.js)
+          echo "::set-output name=previous_hash::$PREVIOUS_HASH"
 
+      - name: Update JSON file with modified JSON_PATH and keep original JSON_PATH for NEW_TITLE
+        run: |
           # Get the JSON_PATH and NEW_TITLE from the payload and remove the surrounding quotes
           JSON_PATH=$(echo "${{ github.event.client_payload.JSON_PATH }}" | tr -d '"')
           NEW_TITLE=$(echo "${{ github.event.client_payload.NEW_TITLE }}" | tr -d '"')
 
-          # Update the title using the values from the payload
+          # Modify the JSON_PATH by removing the last part starting with a dot (.) for the hash
+          MODIFIED_JSON_PATH=$(echo "$JSON_PATH" | sed 's/\.[^.]*$/.hash/')
+
+          # Store the JSON content in a variable
+          JSON_CONTENT=$(cat database.js)
+
+          # Get the previous hash from the previous step
+          PREVIOUS_HASH=${{ steps.get_previous_hash.outputs.previous_hash }}
+
+          # Update the JSON content with the modified JSON_PATH for placing the hash
+          JSON_CONTENT=$(echo "$JSON_CONTENT" | jq "$MODIFIED_JSON_PATH = \"$PREVIOUS_HASH\"")
+
+          # Update the title using the NEW_TITLE from the payload using the original JSON_PATH
           JSON_CONTENT=$(echo "$JSON_CONTENT" | jq "$JSON_PATH = \"$NEW_TITLE\"")
 
           # Write the updated JSON content back to the file
@@ -41,5 +54,5 @@ jobs:
           git config --global user.email "timmeeuwsen@hotmail.nl"
           git config --global user.name "timmit147"
           git add database.js
-          git commit -m "Update title as specified in the payload"
+          git commit -m "Update title and add hash as specified in the payload"
           git push -u origin HEAD
