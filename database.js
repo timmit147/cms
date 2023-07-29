@@ -12,7 +12,7 @@
           "type": "block1",
           "title": "Title of Block 1 - Item 2",
           "content": "Content of Block 1 - Item 2",
-          "link": "https://example.com/item2",
+          "link": "pizza",
           "link_text": "Link Text for Block 1 - Item 2"
         },
         {
