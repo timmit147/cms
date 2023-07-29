@@ -6,7 +6,8 @@
           "type": "block1",
           "title": "chicken",
           "content": "Content of Block 1 - Item 1",
-          "link": "https://example.com/item1"
+          "link": "https://example.com/item1",
+          "hashtitle": "halllo on the other side"
         },
         {
           "type": "block1",
