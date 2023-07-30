@@ -19,10 +19,7 @@ jobs:
           node-version: '14'
 
       - name: Run custom action
-        run: |
-          node removeBlock.js ${{ inputs.pageName }} ${{ inputs.blockName }}
         env:
           NODE_OPTIONS: "--max-old-space-size=4096" # Use this if the script requires more memory
-        with:
-          pageName: ${{ secrets.PAGE_NAME }} # Add the actual secret name for the page name
-          blockName: ${{ secrets.BLOCK_NAME }} # Add the actual secret name for the block name
+        run: |
+          node removeBlock.js ${{ secrets.PAGE_NAME }} ${{ secrets.BLOCK_NAME }}
