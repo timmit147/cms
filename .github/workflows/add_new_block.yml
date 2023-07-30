@@ -31,4 +31,13 @@ jobs:
           exit 1
         fi
 
-    # Add more steps to perform the desired actions with the template data.
+    - name: Add Template Text to database.js
+      run: |
+        # Parse the current database.js content
+        databaseContent=$(cat database.js)
+
+        # Append the template content to the .pages.page1.blocks array
+        updatedDatabaseContent=$(echo "$databaseContent" | jq --argjson newBlock "$templateContent" '.pages.page1.blocks += [$newBlock]')
+
+        # Save the updated content back to the database.js file
+        echo "$updatedDatabaseContent" > database.js
