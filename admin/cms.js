@@ -155,3 +155,38 @@ let currentPage = null;
 
         // Call placeBlock without any argument to display the initial data (page1)
         placeBlock();
+
+
+        function sendBlockName() {
+            // Get the selected value from the dropdown
+            var selectedValue = document.getElementById("dropdown").value;
+            console.log(selectedValue);
+            
+            // Create a new XMLHttpRequest object
+            var xhr = new XMLHttpRequest();
+            
+            // Define the PHP file URL to send the data to
+            var phpFile = "addBlock.php";
+            
+            // Create the data to be sent in the request
+            var data = new FormData();
+            data.append('blockName', selectedValue);
+            
+            // Set up the AJAX request
+            xhr.open("POST", phpFile, true);
+            
+            // Set the event handler to handle the response from the PHP file
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // This is where you can handle the response from the PHP file if needed
+                    console.log(xhr.responseText);
+                }
+            };
+            
+            // Send the AJAX request with the data
+            xhr.send(data);
+        }
+        
+        document.getElementById("submitButton").addEventListener("click", sendBlockName);
+        
+        

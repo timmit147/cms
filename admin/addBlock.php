@@ -4,8 +4,12 @@ $repositoryOwner = 'timmit147';
 $repositoryName = 'cms';
 $personalAccessToken = "";
 
-// The block name to be sent to the workflow
-$blockName = 'block1';
+// Get the block name from the AJAX request
+if (isset($_POST['blockName'])) {
+    $blockName = $_POST['blockName'];
+} else {
+    $blockName = "";
+}
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, "https://api.github.com/repos/$repositoryOwner/$repositoryName/dispatches");
