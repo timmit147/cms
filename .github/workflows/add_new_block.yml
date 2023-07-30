@@ -1,0 +1,20 @@
+name: Add New Block
+
+on:
+  repository_dispatch:
+    types: add_block
+
+jobs:
+  add_block:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Display received data
+      run: |
+        echo "${{ github.event.client_payload.templateData }}" > templateData.json
+        cat templateData.json
+
+    # Add more steps to perform the desired actions with the template data.
