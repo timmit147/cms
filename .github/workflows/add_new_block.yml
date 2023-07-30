@@ -12,7 +12,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install jq (to parse JSON data)
+        run: sudo apt-get -y install jq
+
       - name: Log data
         run: |
           echo "Data from PHP Script:"
-          echo "${{ github.event.client_payload }}" | jq .
+          echo "${{ env.DATA }}" | jq .
+
+      # Add more steps as needed to process the data further
