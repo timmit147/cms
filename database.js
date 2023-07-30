@@ -34,6 +34,11 @@
           "type": "block4",
           "title": "apple",
           "content": "apples en peren"
+        },
+        {
+          "type": "block5",
+          "title": "apple",
+          "content": "apples en peren"
         }
       ]
     },
@@ -65,6 +70,11 @@
       "blocks": [
         {
           "type": "block4",
+          "title": "apple",
+          "content": "apples en peren"
+        },
+        {
+          "type": "block5",
           "title": "apple",
           "content": "apples en peren"
         }
