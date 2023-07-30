@@ -1,28 +1,20 @@
-name: Log Data from PHP Script
+name: Add New Block
+
 on:
   repository_dispatch:
-    types:
-      - trigger-github-action
+    types: add_block
 
 jobs:
-  log_data:
+  add_block:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+    - name: Display received data
+      run: |
+        echo "${{ github.event.client_payload.templateData }}" > templateData.json
+        cat templateData.json
 
-      - name: Install jq (to parse JSON data)
-        run: sudo apt-get -y install jq
-
-      - name: Log data
-        run: |
-          echo "Data from PHP Script:"
-          echo "${{ github.event.client_payload.DATA }}" | jq .
-
-      # Add more steps as needed to process the data further
+    # Add more steps to perform the desired actions with the template data.
