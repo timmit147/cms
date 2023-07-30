@@ -1,6 +1,8 @@
 name: Log Data from PHP Script
 on:
-  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - trigger-github-action
 
 jobs:
   log_data:
@@ -10,20 +12,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Install dependencies
-        run: npm install
-
       - name: Log data
         run: |
-          echo "${{ toJson(github.event.client_payload) }}" > data.json
-          cat data.json
-
-      - name: Print data
-        run: |
           echo "Data from PHP Script:"
-          cat data.json
+          echo "${{ github.event.client_payload }}" | jq .
