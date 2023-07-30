@@ -1,0 +1,28 @@
+name: Remove Block
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  removeBlock:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Run custom action
+        run: |
+          node removeBlock.js ${{ inputs.pageName }} ${{ inputs.blockName }}
+        env:
+          NODE_OPTIONS: "--max-old-space-size=4096" # Use this if the script requires more memory
+        with:
+          pageName: ${{ secrets.PAGE_NAME }} # Add the actual secret name for the page name
+          blockName: ${{ secrets.BLOCK_NAME }} # Add the actual secret name for the block name
