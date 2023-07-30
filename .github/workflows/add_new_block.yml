@@ -14,7 +14,45 @@ jobs:
 
     - name: Display received data
       run: |
-        echo "${{ github.event.client_payload.templateData }}" > templateData.json
-        cat templateData.json
+        # The block name will be passed as an input to the workflow
+        echo "Block Name: ${{ github.event.client_payload.blockName }}"
+        
+        # Find the template file based on the block name and read its content
+        templateFile=$(find . -type f -path "./blocks/${{ github.event.client_payload.blockName }}/template.js")
+        
+        # If the template file is found, read its content and store it in a variable
+        if [ -f "$templateFile" ]; then
+          templateContent=$(cat "$templateFile")
+          echo "$templateContent" > template.js
+          echo "Template content:"
+          echo "$templateContent"
+        else
+          echo "Template file not found: $templateFile"
+          exit 1
+        fi
 
-    # Add more steps to perform the desired actions with the template data.
+    - name: Add Template Text to database.js
+      run: |
+        # Parse the current database.js content using jq (if it's valid JSON)
+        if jq . database.js > /dev/null 2>&1; then
+          # Append the template content to the .pages.page1.blocks array
+          jq --argjson newBlock "$(<template.js)" '.pages.page1.blocks += [$newBlock]' database.js > updated_database.js
+
+          # Save the updated content back to the database.js file
+          mv updated_database.js database.js
+        else
+          echo "Error: The current database.js content is not in valid JSON format."
+          exit 1
+        fi
+
+    - name: Commit and Push Changes
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: "Add new block: ${{ github.event.client_payload.blockName }}"
+        commit_user_name: "timmit147"
+        commit_user_email: "timmeeuwsen@hotmail.nl"
+        commit_author: "timmit147 <timmeeuwsen@hotmail.nl>"
+        commit: true
+        push: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
