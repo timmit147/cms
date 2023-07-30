@@ -18,12 +18,12 @@ jobs:
         echo "Block Name: ${{ github.event.client_payload.blockName }}"
         
         # Find the template file based on the block name and read its content
-        templateFile=$(find . -type f -path "./blocks/${{ github.event.client_payload.blockName }}/templates.js")
+        templateFile=$(find . -type f -path "./blocks/${{ github.event.client_payload.blockName }}/template.js")
         
         # If the template file is found, read its content and store it in a variable
         if [ -f "$templateFile" ]; then
           templateContent=$(cat "$templateFile")
-          echo "$templateContent" > templateData.js
+          echo "$templateContent" > template.js
           echo "Template content:"
           echo "$templateContent"
         else
