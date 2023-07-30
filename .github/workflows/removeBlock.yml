@@ -19,7 +19,8 @@ jobs:
           node-version: '14'
 
       - name: Run custom action
+        run: |
+          cd ${{ github.workspace }}
+          node removeBlock.js ${{ secrets.PAGE_NAME }} ${{ secrets.BLOCK_NAME }}
         env:
           NODE_OPTIONS: "--max-old-space-size=4096" # Use this if the script requires more memory
-        run: |
-          node removeBlock.js ${{ secrets.PAGE_NAME }} ${{ secrets.BLOCK_NAME }}
