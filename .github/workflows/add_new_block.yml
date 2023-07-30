@@ -23,6 +23,6 @@ jobs:
       - name: Log data
         run: |
           echo "Data from PHP Script:"
-          echo "${{ env.DATA }}" | jq .
+          echo "${{ github.event.client_payload.DATA }}" | jq .
 
       # Add more steps as needed to process the data further
