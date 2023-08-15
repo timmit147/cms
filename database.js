@@ -29,11 +29,6 @@
           "content": "Content of Block 3",
           "link": "https://example.com/block3",
           "link_text": "Link Text for Block 3"
-        },
-        {
-          "type": "block4",
-          "title": "apple",
-          "content": "apples en peren"
         }
       ]
     },
