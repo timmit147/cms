@@ -34,36 +34,6 @@
           "type": "block4",
           "title": "apple",
           "content": "apples en peren"
-        },
-        {
-          "type": "block5",
-          "title": "apple",
-          "content": "apples en peren"
-        },
-        {
-          "type": "block5",
-          "title": "apple",
-          "content": "apples en peren"
-        },
-        {
-          "type": "block5",
-          "title": "apple",
-          "content": "apples en peren"
-        },
-        {
-          "type": "block5",
-          "title": "apple",
-          "content": "apples en peren"
-        },
-        {
-          "type": "block5",
-          "title": "apple",
-          "content": "apples en peren"
-        },
-        {
-          "type": "block3",
-          "title": "pizza",
-          "content": "apples en peren"
         }
       ]
     },
